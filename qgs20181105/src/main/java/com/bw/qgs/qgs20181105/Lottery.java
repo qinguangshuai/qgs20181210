@@ -1,6 +1,7 @@
 package com.bw.qgs.qgs20181105;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -35,6 +36,12 @@ public class Lottery extends View implements View.OnClickListener {
     private Paint mPaint;
     private boolean isRote;
     private Animation mAnimation;
+    private int mColor1;
+    private int mColor2;
+    private int mColor3;
+    private int mColor4;
+    private int mColor5;
+    private int mColor6;
 
     public Lottery(Context context) {
         this(context,null);
@@ -53,6 +60,13 @@ public class Lottery extends View implements View.OnClickListener {
         //获取中心点
         mWidth = mWidthPixels / 2;
         mHeight = mHeightPixels / 2;
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Lottery);
+        mColor1 = typedArray.getColor(R.styleable.Lottery_mainColor1, 0);
+        mColor2 = typedArray.getColor(R.styleable.Lottery_mainColor2, 0);
+        mColor3 = typedArray.getColor(R.styleable.Lottery_mainColor3, 0);
+        mColor4 = typedArray.getColor(R.styleable.Lottery_mainColor4, 0);
+        mColor5 = typedArray.getColor(R.styleable.Lottery_mainColor5, 0);
+        mColor6 = typedArray.getColor(R.styleable.Lottery_mainColor6, 0);
         //初始化画布
         initPaint();
         //动画
@@ -86,11 +100,42 @@ public class Lottery extends View implements View.OnClickListener {
         canvas.translate(mWidth,mHeight);
         //获取矩形
         RectF rectF = new RectF(-260,-260,260,260);
-        float start = 60;
+        /*float start = 60;
         for (int i = 0;i<6;i++){
             mPaint.setColor(color[i]);
             canvas.drawArc(rectF,start*i,60,true,mPaint);
+        }*/
+        if(mColor1!=-1){
+            mPaint.setColor(mColor1);
+            canvas.drawArc(rectF,60*0,60,true,mPaint);
+
         }
+        if(mColor1!=-1){
+            mPaint.setColor(mColor2);
+            canvas.drawArc(rectF,60*1,60,true,mPaint);
+
+        }
+        if(mColor2!=-1){
+            mPaint.setColor(mColor3);
+            canvas.drawArc(rectF,60*2,60,true,mPaint);
+
+        }
+        if(mColor3!=-1){
+            mPaint.setColor(mColor4);
+            canvas.drawArc(rectF,60*3,60,true,mPaint);
+
+        }
+        if(mColor4!=-1){
+            mPaint.setColor(mColor5);
+            canvas.drawArc(rectF,60*4,60,true,mPaint);
+
+        }
+        if(mColor5!=-1){
+            mPaint.setColor(mColor6);
+            canvas.drawArc(rectF,60*5,60,true,mPaint);
+
+        }
+
         //绘制小圆
         mPaint.setColor(Color.BLACK);
         canvas.drawCircle(0,0,100,mPaint);
@@ -108,7 +153,7 @@ public class Lottery extends View implements View.OnClickListener {
             mPaint.setColor(Color.WHITE);
             mPaint.setTextSize(20);
             Path path = new Path();
-            path.addArc(mRectf,start*i+20,60);
+            path.addArc(mRectf,60*i+20,60);
             canvas.drawTextOnPath(colorText[i],path,0,0,mPaint);
         }
     }
@@ -127,12 +172,17 @@ public class Lottery extends View implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if(isRote){
             stop();
             radom();
         }else {
+            if(hua!=null){
+                hua.dong(v);
+            }
             start();
         }
+
     }
     public void start(){
         isRote = true;
@@ -148,5 +198,12 @@ public class Lottery extends View implements View.OnClickListener {
         rotateAnimation.setDuration(10);
         rotateAnimation.setFillAfter(true);
         startAnimation(rotateAnimation);
+    }
+    private donghua hua;
+    public interface donghua{
+        Void dong(View view);
+    }
+    public void HttpDong(donghua hua){
+        this.hua = hua;
     }
 }

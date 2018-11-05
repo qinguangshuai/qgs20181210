@@ -6,10 +6,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Lottery.donghua {
 
     private Toolbar mToolbar;
+    private Animation mAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,36 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.finish();
             }
         });
+
+
+
+        Lottery lottery = new Lottery(getApplicationContext());
+        lottery.HttpDong(new Lottery.donghua() {
+            @Override
+            public Void dong(View view) {
+                return null;
+            }
+        });
+       /* lottery.HttpDong(new Lottery.donghua() {
+            @Override
+            public Void dong(View view) {
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //时间
+                        mAnimation.setDuration(3000);
+                        mAnimation.setFillAfter(true);
+                        //设置重复模式
+                        mAnimation.setRepeatMode(Animation.RESTART);
+                        //设置重复次数
+                        mAnimation.setRepeatCount(-1);
+                        //设置xml属性
+                        mAnimation.setInterpolator(new LinearInterpolator());
+                    }
+                });
+                return null;
+            }
+        });*/
     }
 
     @Override
@@ -55,4 +88,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onMenuOpened(int featureId, Menu menu) {
         return super.onMenuOpened(featureId, menu);
     }
+
+    @Override
+    public Void dong(View view) {
+        return null;
+    }
+
+    /*@Override
+    public Void dong(View view) {
+        //时间
+        mAnimation.setDuration(3000);
+        mAnimation.setFillAfter(true);
+        //设置重复模式
+        mAnimation.setRepeatMode(Animation.RESTART);
+        //设置重复次数
+        mAnimation.setRepeatCount(-1);
+        //设置xml属性
+        mAnimation.setInterpolator(new LinearInterpolator());
+        return null;
+    }*/
 }

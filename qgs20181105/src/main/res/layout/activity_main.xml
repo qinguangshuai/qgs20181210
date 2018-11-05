@@ -13,14 +13,21 @@
         android:layout_height="wrap_content">
         <TextView
             android:gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="课时作业"/>
     </android.support.v7.widget.Toolbar>
     <com.bw.qgs.qgs20181105.Lottery
+        android:id="@+id/lot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        app:mainColor1="#ff2522"
+        app:mainColor2="#766584"
+        app:mainColor3="#066f35"
+        app:mainColor4="#680070"
+        app:mainColor5="#ff2661"
+        app:mainColor6="#6025ff"
         />
 
 </LinearLayout>
