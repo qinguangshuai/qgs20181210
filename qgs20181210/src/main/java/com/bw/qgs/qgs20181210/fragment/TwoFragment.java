@@ -6,19 +6,26 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bw.qgs.qgs20181210.App;
+import com.bw.qgs.qgs20181210.NewThrow;
 import com.bw.qgs.qgs20181210.R;
 import com.bw.qgs.qgs20181210.adapter.DuanAdapter;
 import com.bw.qgs.qgs20181210.bean.DuanUser;
+import com.bw.qgs.qgs20181210.bean.User;
+import com.bw.qgs.qgs20181210.greendao.DaoSession;
+import com.bw.qgs.qgs20181210.greendao.UserDao;
 import com.bw.qgs.qgs20181210.presenter.DuanPresenter;
 import com.bw.qgs.qgs20181210.url.UrlUtil;
 import com.bw.qgs.qgs20181210.view.DuanView;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,6 +39,7 @@ public class TwoFragment extends Fragment implements DuanView {
     Unbinder unbinder;
     private DuanPresenter mDuanPresenter;
     private List<DuanUser.DataBean> mData;
+    private UserDao mUserDao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +73,16 @@ public class TwoFragment extends Fragment implements DuanView {
                 },2000);
             }
         });
+
+        NewThrow newThrow = new NewThrow();
+        boolean netWork = newThrow.isNetWork(getActivity());
+        if (netWork){
+
+        }else{
+            List<User> users = mUserDao.loadAll();
+            Log.e("===",users.toString());
+        }
+
         return view;
     }
 
@@ -78,10 +96,35 @@ public class TwoFragment extends Fragment implements DuanView {
     public void onSuccess(String result) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recycle.setLayoutManager(linearLayoutManager);
+        mUserDao = App.mDaoSession.getUserDao();
         Gson gson = new Gson();
         DuanUser duanUser = gson.fromJson(result, DuanUser.class);
         mData = duanUser.getData();
         DuanAdapter duanAdapter = new DuanAdapter(getActivity(),mData);
+
+        /*List<User> userGreens=new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++) {
+            DuanUser.DataBean bean = mData.get(i);
+            String content = bean.getContent();
+            String createTime = bean.getCreateTime();
+            Object imgUrls = bean.getImgUrls();
+            int jid = bean.getJid();
+            int uid = bean.getUid();
+            userGreens.add(new User(null,content,createTime,imgUrls+"",jid,uid,null));
+        }*/
+        List<User> userGreens=new ArrayList<>();
+        for (int i = 0; i < mData.size(); i++) {
+            DuanUser.DataBean bean = mData.get(i);
+            String content = bean.getContent();
+            String createTime = bean.getCreateTime();
+            Object imgUrls = bean.getImgUrls();
+            int jid = bean.getJid();
+            int uid = bean.getUid();
+            userGreens.add(new User(null,content,createTime,imgUrls+"",jid,uid,null));
+        }
+        for (int i = 0; i < userGreens.size(); i++) {
+            mUserDao.insert(userGreens.get(i));
+        }
         recycle.setAdapter(duanAdapter);
     }
 
